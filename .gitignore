@@ -104,3 +104,4 @@ replay_pid*
 *.swp
 *.swo
 *~ 
+.directory
