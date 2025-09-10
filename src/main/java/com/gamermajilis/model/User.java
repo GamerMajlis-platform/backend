@@ -125,6 +125,10 @@ public class User {
         this.emailVerified = true; // Discord emails are considered verified
     }
     
+    public User(Long participantId) {
+        //TODO Auto-generated constructor stub
+    }
+
     // Getters and Setters
     public Long getId() {
         return id;
