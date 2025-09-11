@@ -2,7 +2,10 @@ package com.gamermajilis.config;
 
 import com.gamermajilis.security.JwtAuthenticationEntryPoint;
 import com.gamermajilis.security.JwtAuthenticationFilter;
+import com.gamermajilis.security.OAuth2AuthenticationFailureHandler;
+import com.gamermajilis.security.OAuth2AuthenticationSuccessHandler;
 import com.gamermajilis.service.CustomUserDetailsService;
+import com.gamermajilis.service.DiscordOAuth2Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -36,6 +39,15 @@ public class SecurityConfig {
 
     @Autowired
     private JwtAuthenticationFilter jwtAuthenticationFilter;
+
+    @Autowired
+    private DiscordOAuth2Service discordOAuth2Service;
+
+    @Autowired
+    private OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
+
+    @Autowired
+    private OAuth2AuthenticationFailureHandler oAuth2AuthenticationFailureHandler;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -87,7 +99,11 @@ public class SecurityConfig {
                         .requestMatchers("/moderator/**").hasAnyRole("ADMINISTRATOR", "MODERATOR")
 
                         // All other requests need authentication
-                        .anyRequest().authenticated());
+                        .anyRequest().authenticated())
+                .oauth2Login(oauth2 -> oauth2
+                        .userInfoEndpoint(userInfo -> userInfo.userService(discordOAuth2Service))
+                        .successHandler(oAuth2AuthenticationSuccessHandler)
+                        .failureHandler(oAuth2AuthenticationFailureHandler));
 
         http.authenticationProvider(authenticationProvider());
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
