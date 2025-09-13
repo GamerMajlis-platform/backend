@@ -81,6 +81,10 @@ public class AuthService {
                 return response;
             }
 
+            // Generate verification token FIRST
+            String verificationToken = UUID.randomUUID().toString();
+            logger.info("Generated verification token: {}", verificationToken);
+
             // Create new user
             User user = new User();
             user.setEmail(email.toLowerCase().trim());
@@ -88,17 +92,38 @@ public class AuthService {
             user.setDisplayName(displayName.trim());
             user.setAuthProvider(AuthProvider.EMAIL);
             user.setEmailVerified(false);
-            user.setVerificationToken(UUID.randomUUID().toString());
+            user.setVerificationToken(verificationToken);
 
+            // Debug logging
+            logger.info("Before save - User verification token: {}", user.getVerificationToken());
+            logger.info("Before save - User email verified: {}", user.getEmailVerified());
+
+            // Save user with token
             User savedUser = userRepository.save(user);
 
-            // Send verification email
-            try {
-                emailService.sendVerificationEmail(savedUser.getEmail(), savedUser.getVerificationToken());
-                logger.info("Verification email sent to: {}", savedUser.getEmail());
-            } catch (Exception e) {
-                logger.error("Failed to send verification email to: {}", savedUser.getEmail(), e);
-                // Don't fail the signup process if email fails
+            // Verify the token was saved
+            logger.info("After save - User ID: {}", savedUser.getId());
+            logger.info("After save - User verification token: {}", savedUser.getVerificationToken());
+            logger.info("After save - User email verified: {}", savedUser.getEmailVerified());
+
+            // Double-check by fetching from database
+            Optional<User> verifyUser = userRepository.findById(savedUser.getId());
+            if (verifyUser.isPresent()) {
+                User dbUser = verifyUser.get();
+                logger.info("DB verification - Token: {}", dbUser.getVerificationToken());
+                logger.info("DB verification - Email verified: {}", dbUser.getEmailVerified());
+
+                // Use the DB user for email sending to ensure we have the correct token
+                try {
+                    emailService.sendVerificationEmail(dbUser.getEmail(), dbUser.getVerificationToken());
+                    logger.info("Verification email sent to: {} with token: {}",
+                            dbUser.getEmail(), dbUser.getVerificationToken());
+                } catch (Exception e) {
+                    logger.error("Failed to send verification email to: {}", dbUser.getEmail(), e);
+                    // Don't fail the signup process if email fails
+                }
+            } else {
+                logger.error("Could not retrieve saved user from database!");
             }
 
             response.put("success", true);

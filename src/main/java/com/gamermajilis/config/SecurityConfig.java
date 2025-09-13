@@ -76,12 +76,14 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authz -> authz
                         // Public endpoints
                         .requestMatchers("/auth/signup", "/auth/login", "/auth/verify-email",
-                                "/auth/resend-verification")
+                                "/auth/resend-verification", "/auth/validate-token")
                         .permitAll()
-                        .requestMatchers("/auth/validate-token").permitAll()
 
                         // OAuth2 endpoints (for Discord login)
                         .requestMatchers("/oauth2/**", "/login/oauth2/**").permitAll()
+
+                        // Test endpoints (remove in production)
+                        .requestMatchers("/test/**").permitAll()
 
                         // Swagger/OpenAPI endpoints
                         .requestMatchers("/swagger-ui/**", "/swagger-ui.html", "/api-docs/**", "/v3/api-docs/**")
