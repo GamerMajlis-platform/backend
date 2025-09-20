@@ -1,0 +1,46 @@
+# Exclude build artifacts
+target/
+*.jar
+*.war
+*.class
+
+# Exclude IDE files
+.vscode/
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# Exclude Git
+.git
+.gitignore
+*.md
+README.md
+
+# Exclude Docker files
+Dockerfile
+docker-compose*.yml
+.dockerignore
+
+# Exclude logs
+logs/
+*.log
+
+# Exclude temporary files
+.DS_Store
+Thumbs.db
+*~
+*.tmp
+*.temp
+
+# Exclude test files (optional - uncomment if you want to exclude tests)
+# src/test/
+
+# Exclude documentation
+docs/
+*.png
+*.jpg
+*.gif
+
+# Node modules (if any)
+node_modules/ 

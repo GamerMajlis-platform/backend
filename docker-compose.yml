@@ -1,0 +1,88 @@
+# version: '3.8'  # Removed - obsolete in newer Docker Compose
+
+services:
+  # PostgreSQL Database Service
+  postgres:
+    image: postgres:15-alpine
+    container_name: gamermajilis-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: gamermajilis_db
+      POSTGRES_USER: gamermajilis_user
+      POSTGRES_PASSWORD: gamermajilis_pass123
+      PGDATA: /var/lib/postgresql/data/pgdata
+    volumes:
+      # Persist database data
+      - postgres_data:/var/lib/postgresql/data/pgdata
+      # Optional: Add init scripts
+      - ./docker/init-db:/docker-entrypoint-initdb.d
+    ports:
+      # Expose PostgreSQL port for external access (optional)
+      - "5433:5432"
+    networks:
+      - gamermajilis-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U gamermajilis_user -d gamermajilis_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Spring Boot Application Service
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: gamermajilis-app
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      # Database connection for Docker
+      DATABASE_URL: jdbc:postgresql://postgres:5432/gamermajilis_db
+      DATABASE_USERNAME: gamermajilis_user
+      DATABASE_PASSWORD: gamermajilis_pass123
+      
+      # JVM options for Docker
+      JAVA_OPTS: -Xmx512m -Xms256m
+      
+      # Spring profiles
+      SPRING_PROFILES_ACTIVE: docker
+      
+      # JWT secret (you should change this in production)
+      JWT_SECRET: GamerMajilisDockerSecretKeyForJWTTokenGeneration2024
+      
+      # Email configuration (update with your credentials)
+      SPRING_MAIL_HOST: smtp.gmail.com
+      SPRING_MAIL_PORT: 587
+      SPRING_MAIL_USERNAME: ${EMAIL_USERNAME:-mhmdth276@gmail.com}
+      SPRING_MAIL_PASSWORD: ${EMAIL_PASSWORD:-saag tgwc hsab qzte}
+      
+      # Discord OAuth (update with your credentials)
+      DISCORD_CLIENT_ID: ${DISCORD_CLIENT_ID:-1416218898063429724}
+      DISCORD_CLIENT_SECRET: ${DISCORD_CLIENT_SECRET:-AiAhe95Q2fOoDdi_ZGVr6PNUS3s6rKXo}
+    ports:
+      - "8080:8080"
+    networks:
+      - gamermajilis-network
+    volumes:
+      # Optional: Mount logs directory
+      - app_logs:/app/logs
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8080/api/actuator/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+# Define named volumes for data persistence
+volumes:
+  postgres_data:
+    driver: local
+  app_logs:
+    driver: local
+
+# Define custom network
+networks:
+  gamermajilis-network:
+    driver: bridge 

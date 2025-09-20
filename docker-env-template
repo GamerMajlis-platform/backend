@@ -1,0 +1,21 @@
+# Copy this content to a .env file and update the values
+# This file shows all the environment variables you can customize
+
+# Database Configuration (Docker internal - usually no need to change)
+DATABASE_URL=jdbc:postgresql://postgres:5432/gamermajilis_db
+DATABASE_USERNAME=gamermajilis_user
+DATABASE_PASSWORD=gamermajilis_pass123
+
+# Email Configuration (Update with your email credentials)
+EMAIL_USERNAME=your-email@gmail.com
+EMAIL_PASSWORD=your-app-password
+
+# Discord OAuth Configuration (Update with your Discord app credentials)  
+DISCORD_CLIENT_ID=your-discord-client-id
+DISCORD_CLIENT_SECRET=your-discord-client-secret
+
+# JWT Configuration (Change this secret in production)
+JWT_SECRET=GamerMajilisDockerSecretKeyForJWTTokenGeneration2024-ChangeThis
+
+# Application Configuration
+SPRING_PROFILES_ACTIVE=docker 
