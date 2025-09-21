@@ -5,7 +5,7 @@ import com.gamermajilis.security.JwtAuthenticationFilter;
 import com.gamermajilis.security.OAuth2AuthenticationFailureHandler;
 import com.gamermajilis.security.OAuth2AuthenticationSuccessHandler;
 import com.gamermajilis.service.CustomUserDetailsService;
-import com.gamermajilis.service.DiscordOAuth2Service;
+// import com.gamermajilis.service.DiscordOAuth2Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -40,8 +40,8 @@ public class SecurityConfig {
     @Autowired
     private JwtAuthenticationFilter jwtAuthenticationFilter;
 
-    @Autowired
-    private DiscordOAuth2Service discordOAuth2Service;
+    // @Autowired
+    // private DiscordOAuth2Service discordOAuth2Service;
 
     @Autowired
     private OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
@@ -79,6 +79,9 @@ public class SecurityConfig {
                                 "/auth/resend-verification", "/auth/validate-token")
                         .permitAll()
 
+                        // Discord OAuth endpoints
+                        .requestMatchers("/auth/discord/**").permitAll()
+
                         // OAuth2 endpoints (for Discord login)
                         .requestMatchers("/oauth2/**", "/login/oauth2/**").permitAll()
 
@@ -103,7 +106,7 @@ public class SecurityConfig {
                         // All other requests need authentication
                         .anyRequest().authenticated())
                 .oauth2Login(oauth2 -> oauth2
-                        .userInfoEndpoint(userInfo -> userInfo.userService(discordOAuth2Service))
+                        // .userInfoEndpoint(userInfo -> userInfo.userService(discordOAuth2Service)) // TODO: Implement proper OAuth2UserService
                         .successHandler(oAuth2AuthenticationSuccessHandler)
                         .failureHandler(oAuth2AuthenticationFailureHandler));
 
