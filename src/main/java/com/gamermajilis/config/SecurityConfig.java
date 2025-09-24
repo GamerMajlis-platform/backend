@@ -5,7 +5,7 @@ import com.gamermajilis.security.JwtAuthenticationFilter;
 import com.gamermajilis.security.OAuth2AuthenticationFailureHandler;
 import com.gamermajilis.security.OAuth2AuthenticationSuccessHandler;
 import com.gamermajilis.service.CustomUserDetailsService;
-// import com.gamermajilis.service.DiscordOAuth2Service;
+import com.gamermajilis.service.DiscordOAuth2ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -40,8 +40,8 @@ public class SecurityConfig {
     @Autowired
     private JwtAuthenticationFilter jwtAuthenticationFilter;
 
-    // @Autowired
-    // private DiscordOAuth2Service discordOAuth2Service;
+    @Autowired
+    private DiscordOAuth2ServiceImpl discordOAuth2Service;
 
     @Autowired
     private OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
@@ -82,7 +82,7 @@ public class SecurityConfig {
                         // Discord OAuth endpoints
                         .requestMatchers("/auth/discord/**").permitAll()
 
-                        // OAuth2 endpoints (for Discord login)
+                        // OAuth2 endpoints (for Discord login) - FIXED
                         .requestMatchers("/oauth2/**", "/login/oauth2/**").permitAll()
 
                         // Test endpoints (remove in production)
@@ -106,7 +106,8 @@ public class SecurityConfig {
                         // All other requests need authentication
                         .anyRequest().authenticated())
                 .oauth2Login(oauth2 -> oauth2
-                        // .userInfoEndpoint(userInfo -> userInfo.userService(discordOAuth2Service)) // TODO: Implement proper OAuth2UserService
+                        // Configure the OAuth2UserService
+                        .userInfoEndpoint(userInfo -> userInfo.userService(discordOAuth2Service))
                         .successHandler(oAuth2AuthenticationSuccessHandler)
                         .failureHandler(oAuth2AuthenticationFailureHandler));
 
