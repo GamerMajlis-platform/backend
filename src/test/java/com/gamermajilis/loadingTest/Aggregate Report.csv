@@ -1,0 +1,5 @@
+Label,# Samples,Average,Median,90% Line,95% Line,99% Line,Min,Max,Error %,Throughput,Received KB/sec,Sent KB/sec
+Request - Get User Profile by ID,4000,133,122,291,330,403,3,482,0.000%,702.00070,601.91,305.07
+Request - Search Profiles,4000,131,121,279,328,417,3,464,0.000%,702.86417,795.53,327.41
+Request - Get Profile Suggestions,4000,129,117,281,324,397,2,465,0.000%,702.98770,348.06,318.54
+TOTAL,12000,131,120,284,328,406,2,482,0.000%,2102.68092,1741.28,948.67
