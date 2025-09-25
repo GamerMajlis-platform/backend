@@ -182,6 +182,70 @@ public class ChatMessage {
         return createdAt;
     }
     
+    public String getFileUrl() {
+        return fileUrl;
+    }
+    
+    public void setFileUrl(String fileUrl) {
+        this.fileUrl = fileUrl;
+    }
+    
+    public String getFileName() {
+        return fileName;
+    }
+    
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
+    }
+    
+    public Long getFileSize() {
+        return fileSize;
+    }
+    
+    public void setFileSize(Long fileSize) {
+        this.fileSize = fileSize;
+    }
+    
+    public Boolean getIsEdited() {
+        return isEdited;
+    }
+    
+    public void setIsEdited(Boolean isEdited) {
+        this.isEdited = isEdited;
+    }
+    
+    public String getFlaggedReason() {
+        return flaggedReason;
+    }
+    
+    public void setFlaggedReason(String flaggedReason) {
+        this.flaggedReason = flaggedReason;
+    }
+    
+    public Integer getReactionCount() {
+        return reactionCount;
+    }
+    
+    public void setReactionCount(Integer reactionCount) {
+        this.reactionCount = reactionCount;
+    }
+    
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+    
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+    
+    public LocalDateTime getDeletedAt() {
+        return deletedAt;
+    }
+    
+    public void setDeletedAt(LocalDateTime deletedAt) {
+        this.deletedAt = deletedAt;
+    }
+    
     // Helper methods
     public boolean isReply() {
         return this.replyToMessage != null;
