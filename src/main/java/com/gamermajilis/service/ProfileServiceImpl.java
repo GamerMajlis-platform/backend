@@ -5,7 +5,6 @@ import com.gamermajilis.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -16,7 +15,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.time.LocalDateTime;
+import java.nio.file.StandardCopyOption;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -31,8 +30,7 @@ public class ProfileServiceImpl implements ProfileService {
     @Autowired
     private MediaService mediaService;
 
-    @Value("${app.upload.profile-pictures:uploads/profile-pictures}")
-    private String profilePictureUploadDir;
+    private final String profilePictureUploadDir = "/tmp/uploads/profile-pictures/";
 
     @Override
     public Map<String, Object> getUserProfile(Long userId) {
@@ -132,19 +130,17 @@ public class ProfileServiceImpl implements ProfileService {
 
         try {
             // Create upload directory if it doesn't exist
-            Path uploadPath = Paths.get(profilePictureUploadDir);
-            if (!Files.exists(uploadPath)) {
-                Files.createDirectories(uploadPath);
-            }
+            createDirectoriesIfNeeded();
 
             // Generate unique filename
             String originalFilename = file.getOriginalFilename();
-            String fileExtension = originalFilename.substring(originalFilename.lastIndexOf('.'));
+            String fileExtension = getFileExtension(originalFilename);
             String newFilename = "profile_" + userId + "_" + System.currentTimeMillis() + fileExtension;
-            Path filePath = uploadPath.resolve(newFilename);
+            String filePath = profilePictureUploadDir + newFilename;
 
             // Save file
-            Files.copy(file.getInputStream(), filePath);
+            Path uploadPath = Paths.get(filePath);
+            Files.copy(file.getInputStream(), uploadPath, StandardCopyOption.REPLACE_EXISTING);
 
             // Remove old profile picture if exists
             if (user.getProfilePictureUrl() != null) {
@@ -312,5 +308,35 @@ public class ProfileServiceImpl implements ProfileService {
         response.put("success", false);
         response.put("message", message);
         return response;
+    }
+
+    // Helper methods (same as MediaServiceImpl)
+    private void createDirectoriesIfNeeded() throws IOException {
+        try {
+            Path uploadPath = Paths.get(profilePictureUploadDir);
+            
+            logger.info("Creating profile picture upload directory: {}", uploadPath.toString());
+            
+            if (!Files.exists(uploadPath)) {
+                Files.createDirectories(uploadPath);
+                logger.info("Created profile picture upload directory: {}", uploadPath.toString());
+            }
+            
+            // Verify directory is writable
+            if (!Files.isWritable(uploadPath)) {
+                throw new IOException("Upload directory is not writable: " + uploadPath.toString());
+            }
+            
+        } catch (IOException e) {
+            logger.error("Failed to create profile picture upload directory", e);
+            throw e;
+        }
+    }
+    
+    private String getFileExtension(String filename) {
+        if (filename == null || filename.lastIndexOf('.') == -1) {
+            return "";
+        }
+        return filename.substring(filename.lastIndexOf('.'));
     }
 }
