@@ -197,4 +197,15 @@ public class PostComment {
             this.likeCount--;
         }
     }
+    
+    public LocalDateTime getDeletedAt() {
+        return deletedAt;
+    }
+    
+    public void setDeletedAt(LocalDateTime deletedAt) {
+        this.deletedAt = deletedAt;
+        if (deletedAt != null) {
+            this.isDeleted = true;
+        }
+    }
 }
