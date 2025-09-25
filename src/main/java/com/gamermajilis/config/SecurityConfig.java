@@ -97,6 +97,9 @@ public class SecurityConfig {
 
                         // Static resources
                         .requestMatchers("/images/**", "/css/**", "/js/**", "/favicon.ico").permitAll()
+                        
+                        // Uploaded files (profile pictures, media, etc.)
+                        .requestMatchers("/uploads/**").permitAll()
 
                         // Protected endpoints
                         .requestMatchers("/auth/me", "/auth/logout").authenticated()
