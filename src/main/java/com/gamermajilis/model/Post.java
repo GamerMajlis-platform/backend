@@ -321,4 +321,93 @@ public class Post {
     public void removeMedia(Media media) {
         this.attachedMedia.remove(media);
     }
+    
+    // Additional getters and setters
+    public String getGameTitle() {
+        return gameTitle;
+    }
+    
+    public void setGameTitle(String gameTitle) {
+        this.gameTitle = gameTitle;
+    }
+    
+    public String getGameCategory() {
+        return gameCategory;
+    }
+    
+    public void setGameCategory(String gameCategory) {
+        this.gameCategory = gameCategory;
+    }
+    
+    public String getPlatform() {
+        return platform;
+    }
+    
+    public void setPlatform(String platform) {
+        this.platform = platform;
+    }
+    
+    public String getTags() {
+        return tags;
+    }
+    
+    public void setTags(String tags) {
+        this.tags = tags;
+    }
+    
+    public String getHashtags() {
+        return hashtags;
+    }
+    
+    public void setHashtags(String hashtags) {
+        this.hashtags = hashtags;
+    }
+    
+    public String getModerationStatus() {
+        return moderationStatus;
+    }
+    
+    public void setModerationStatus(String moderationStatus) {
+        this.moderationStatus = moderationStatus;
+    }
+    
+    public void setViewCount(Long viewCount) {
+        this.viewCount = viewCount;
+    }
+    
+    public void setLikeCount(Long likeCount) {
+        this.likeCount = likeCount;
+    }
+    
+    public Long getCommentCount() {
+        return commentCount;
+    }
+    
+    public void setCommentCount(Long commentCount) {
+        this.commentCount = commentCount;
+    }
+    
+    public Long getShareCount() {
+        return shareCount;
+    }
+    
+    public void setShareCount(Long shareCount) {
+        this.shareCount = shareCount;
+    }
+    
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+    
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+    
+    public LocalDateTime getDeletedAt() {
+        return deletedAt;
+    }
+    
+    public void setDeletedAt(LocalDateTime deletedAt) {
+        this.deletedAt = deletedAt;
+    }
 } 

@@ -388,6 +388,182 @@ public class Product {
         this.listedAt = listedAt;
     }
     
+    public String getBrand() {
+        return brand;
+    }
+    
+    public void setBrand(String brand) {
+        this.brand = brand;
+    }
+    
+    public String getModel() {
+        return model;
+    }
+    
+    public void setModel(String model) {
+        this.model = model;
+    }
+    
+    public String getGameCompatibility() {
+        return gameCompatibility;
+    }
+    
+    public void setGameCompatibility(String gameCompatibility) {
+        this.gameCompatibility = gameCompatibility;
+    }
+    
+    public BigDecimal getShippingCost() {
+        return shippingCost;
+    }
+    
+    public void setShippingCost(BigDecimal shippingCost) {
+        this.shippingCost = shippingCost;
+    }
+    
+    public Boolean getFreeShipping() {
+        return freeShipping;
+    }
+    
+    public void setFreeShipping(Boolean freeShipping) {
+        this.freeShipping = freeShipping;
+    }
+    
+    public Integer getEstimatedDeliveryDays() {
+        return estimatedDeliveryDays;
+    }
+    
+    public void setEstimatedDeliveryDays(Integer estimatedDeliveryDays) {
+        this.estimatedDeliveryDays = estimatedDeliveryDays;
+    }
+    
+    public String getSpecifications() {
+        return specifications;
+    }
+    
+    public void setSpecifications(String specifications) {
+        this.specifications = specifications;
+    }
+    
+    public String getDimensions() {
+        return dimensions;
+    }
+    
+    public void setDimensions(String dimensions) {
+        this.dimensions = dimensions;
+    }
+    
+    public Double getWeight() {
+        return weight;
+    }
+    
+    public void setWeight(Double weight) {
+        this.weight = weight;
+    }
+    
+    public String getColor() {
+        return color;
+    }
+    
+    public void setColor(String color) {
+        this.color = color;
+    }
+    
+    public String getTags() {
+        return tags;
+    }
+    
+    public void setTags(String tags) {
+        this.tags = tags;
+    }
+    
+    public String getReturnPolicy() {
+        return returnPolicy;
+    }
+    
+    public void setReturnPolicy(String returnPolicy) {
+        this.returnPolicy = returnPolicy;
+    }
+    
+    public Integer getWarrantyPeriodDays() {
+        return warrantyPeriodDays;
+    }
+    
+    public void setWarrantyPeriodDays(Integer warrantyPeriodDays) {
+        this.warrantyPeriodDays = warrantyPeriodDays;
+    }
+    
+    public String getWarrantyDescription() {
+        return warrantyDescription;
+    }
+    
+    public void setWarrantyDescription(String warrantyDescription) {
+        this.warrantyDescription = warrantyDescription;
+    }
+    
+    public String getMainImageUrl() {
+        return mainImageUrl;
+    }
+    
+    public void setMainImageUrl(String mainImageUrl) {
+        this.mainImageUrl = mainImageUrl;
+    }
+    
+    public String getImageUrls() {
+        return imageUrls;
+    }
+    
+    public void setImageUrls(String imageUrls) {
+        this.imageUrls = imageUrls;
+    }
+    
+    public Long getViewCount() {
+        return viewCount;
+    }
+    
+    public void setViewCount(Long viewCount) {
+        this.viewCount = viewCount;
+    }
+    
+    public Long getWishlistCount() {
+        return wishlistCount;
+    }
+    
+    public void setWishlistCount(Long wishlistCount) {
+        this.wishlistCount = wishlistCount;
+    }
+    
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+    
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+    
+    public LocalDateTime getSoldAt() {
+        return soldAt;
+    }
+    
+    public void setSoldAt(LocalDateTime soldAt) {
+        this.soldAt = soldAt;
+    }
+    
+    public LocalDateTime getDeletedAt() {
+        return deletedAt;
+    }
+    
+    public void setDeletedAt(LocalDateTime deletedAt) {
+        this.deletedAt = deletedAt;
+    }
+    
+    public Integer getQuantitySold() {
+        return quantitySold;
+    }
+    
+    public void setQuantitySold(Integer quantitySold) {
+        this.quantitySold = quantitySold;
+    }
+    
     // Helper methods
     public boolean isDeleted() {
         return this.deletedAt != null;

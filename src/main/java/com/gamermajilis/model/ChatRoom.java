@@ -187,6 +187,118 @@ public class ChatRoom {
         this.lastActivity = lastActivity;
     }
     
+    public Integer getMaxMembers() {
+        return maxMembers;
+    }
+    
+    public void setMaxMembers(Integer maxMembers) {
+        this.maxMembers = maxMembers;
+    }
+    
+    public Integer getCurrentMembers() {
+        return currentMembers;
+    }
+    
+    public void setCurrentMembers(Integer currentMembers) {
+        this.currentMembers = currentMembers;
+    }
+    
+    public List<Long> getModeratorIds() {
+        return moderatorIds;
+    }
+    
+    public void setModeratorIds(List<Long> moderatorIds) {
+        this.moderatorIds = moderatorIds;
+    }
+    
+    public Integer getMessageHistoryDays() {
+        return messageHistoryDays;
+    }
+    
+    public void setMessageHistoryDays(Integer messageHistoryDays) {
+        this.messageHistoryDays = messageHistoryDays;
+    }
+    
+    public Boolean getAllowFileSharing() {
+        return allowFileSharing;
+    }
+    
+    public void setAllowFileSharing(Boolean allowFileSharing) {
+        this.allowFileSharing = allowFileSharing;
+    }
+    
+    public Boolean getAllowEmojis() {
+        return allowEmojis;
+    }
+    
+    public void setAllowEmojis(Boolean allowEmojis) {
+        this.allowEmojis = allowEmojis;
+    }
+    
+    public Integer getSlowModeSeconds() {
+        return slowModeSeconds;
+    }
+    
+    public void setSlowModeSeconds(Integer slowModeSeconds) {
+        this.slowModeSeconds = slowModeSeconds;
+    }
+    
+    public Boolean getIsActive() {
+        return isActive;
+    }
+    
+    public void setIsActive(Boolean isActive) {
+        this.isActive = isActive;
+    }
+    
+    public String getGameTitle() {
+        return gameTitle;
+    }
+    
+    public void setGameTitle(String gameTitle) {
+        this.gameTitle = gameTitle;
+    }
+    
+    public Long getTournamentId() {
+        return tournamentId;
+    }
+    
+    public void setTournamentId(Long tournamentId) {
+        this.tournamentId = tournamentId;
+    }
+    
+    public Long getEventId() {
+        return eventId;
+    }
+    
+    public void setEventId(Long eventId) {
+        this.eventId = eventId;
+    }
+    
+    public Long getTotalMessages() {
+        return totalMessages;
+    }
+    
+    public void setTotalMessages(Long totalMessages) {
+        this.totalMessages = totalMessages;
+    }
+    
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+    
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+    
+    public LocalDateTime getDeletedAt() {
+        return deletedAt;
+    }
+    
+    public void setDeletedAt(LocalDateTime deletedAt) {
+        this.deletedAt = deletedAt;
+    }
+    
     // Helper methods
     public boolean isDeleted() {
         return this.deletedAt != null;
