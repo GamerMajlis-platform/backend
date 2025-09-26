@@ -1,6 +1,5 @@
 package com.gamermajilis.security;
 
-import com.gamermajilis.service.DiscordOAuth2Service;
 import com.gamermajilis.service.DiscordOAuth2User;
 import com.gamermajilis.util.JwtUtil;
 import jakarta.servlet.ServletException;
@@ -9,14 +8,13 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 
 @Component
 public class OAuth2AuthenticationSuccessHandler implements AuthenticationSuccessHandler {
@@ -25,6 +23,13 @@ public class OAuth2AuthenticationSuccessHandler implements AuthenticationSuccess
 
     @Autowired
     private JwtUtil jwtUtil;
+
+    // Configure your frontend URL and port here
+    @Value("${app.frontend.url:http://localhost:3000}")
+    private String frontendUrl;
+
+    @Value("${app.frontend.auth.success-path:/auth/success}")
+    private String successPath;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
@@ -36,21 +41,25 @@ public class OAuth2AuthenticationSuccessHandler implements AuthenticationSuccess
             // Generate JWT token
             String token = jwtUtil.generateToken(oauth2User.getUser());
 
-            logger.info("Discord OAuth2 authentication successful for user: {}", oauth2User.getDisplayName());
+            logger.info("Discord OAuth2 authentication successful for user: {} (ID: {})",
+                    oauth2User.getDisplayName(), oauth2User.getUserId());
 
-            // Redirect to frontend with token
-            String redirectUrl = UriComponentsBuilder.fromUriString("http://localhost:3000/auth/discord/callback")
+            // Build redirect URL with token
+            String redirectUrl = UriComponentsBuilder.fromUriString(frontendUrl + successPath)
                     .queryParam("token", token)
                     .queryParam("success", "true")
+                    .queryParam("provider", "discord")
                     .build().toUriString();
 
+            logger.info("Redirecting to frontend: {}", redirectUrl);
             response.sendRedirect(redirectUrl);
 
         } catch (Exception e) {
             logger.error("Error during OAuth2 success handling", e);
 
-            String errorUrl = UriComponentsBuilder.fromUriString("http://localhost:3000/auth/discord/callback")
-                    .queryParam("error", "authentication_failed")
+            // Redirect to frontend with error
+            String errorUrl = UriComponentsBuilder.fromUriString(frontendUrl + successPath)
+                    .queryParam("error", "authentication_processing_failed")
                     .queryParam("success", "false")
                     .build().toUriString();
 
