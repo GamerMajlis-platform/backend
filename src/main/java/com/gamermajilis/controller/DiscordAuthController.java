@@ -34,7 +34,7 @@ public class DiscordAuthController {
     @Value("${spring.security.oauth2.client.registration.discord.client-id}")
     private String discordClientId;
 
-    @Value("${spring.security.oauth2.client.registration.discord.redirect-uri:http://localhost:8080/auth/discord/callback}")
+    @Value("${spring.security.oauth2.client.registration.discord.redirect-uri:http://localhost:3000/auth/discord/callback}")
     private String redirectUri;
 
     @GetMapping("/login")
@@ -46,7 +46,7 @@ public class DiscordAuthController {
                 "&response_type=code" +
                 "&scope=identify%20email" +
                 "&state=" + generateRandomState();
-        
+
         logger.info("Redirecting to Discord OAuth: {}", discordAuthUrl);
         response.sendRedirect(discordAuthUrl);
     }
@@ -58,7 +58,7 @@ public class DiscordAuthController {
             @RequestParam(required = false) String state,
             @RequestParam(required = false) String error,
             HttpServletResponse response) {
-        
+
         try {
             if (error != null) {
                 logger.warn("Discord OAuth error: {}", error);
@@ -80,7 +80,7 @@ public class DiscordAuthController {
             // Redirect to frontend with token
             String token = (String) authResult.get("token");
             String frontendUrl = "http://localhost:3000/auth/success?token=" + token;
-            
+
             try {
                 response.sendRedirect(frontendUrl);
                 return null; // Response handled by redirect
@@ -100,7 +100,7 @@ public class DiscordAuthController {
     public ResponseEntity<Map<String, Object>> linkDiscordAccount(
             HttpServletRequest request,
             @RequestParam String code) {
-        
+
         try {
             Long userId = getUserIdFromRequest(request);
             if (userId == null) {

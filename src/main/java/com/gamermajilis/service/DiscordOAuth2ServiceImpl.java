@@ -231,7 +231,7 @@ public class DiscordOAuth2ServiceImpl extends DefaultOAuth2UserService implement
                     "&client_secret=AiAhe95Q2fOoDdi_ZGVr6PNUS3s6rKXo" +
                     "&grant_type=authorization_code" +
                     "&code=" + code +
-                    "&redirect_uri=http://localhost:8080/api/login/oauth2/code/discord";
+                    "&redirect_uri=http://localhost:3000/auth/discord/callback";
 
             HttpEntity<String> request = new HttpEntity<>(requestBody, headers);
 
