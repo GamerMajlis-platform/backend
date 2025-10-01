@@ -219,7 +219,10 @@ public class ProductController {
             @RequestParam(required = false) BigDecimal shippingCost,
             @RequestParam(required = false) Boolean freeShipping,
             @RequestParam(required = false) String tags,
-            @RequestParam(required = false) String status) {
+            @RequestParam(required = false) String status,
+            @RequestParam(required = false) Boolean isAvailable,
+            @RequestParam(required = false) String moderationStatus,
+            @RequestParam(required = false) String listedAt) {
         
         try {
             Long userId = getUserIdFromRequest(request);
@@ -244,6 +247,9 @@ public class ProductController {
             if (freeShipping != null) updateData.put("freeShipping", freeShipping);
             if (tags != null) updateData.put("tags", tags);
             if (status != null) updateData.put("status", status);
+            if (isAvailable != null) updateData.put("isAvailable", isAvailable);
+            if (moderationStatus != null) updateData.put("moderationStatus", moderationStatus);
+            if (listedAt != null) updateData.put("listedAt", listedAt);
 
             Map<String, Object> response = productService.updateProduct(userId, productId, updateData);
             return ResponseEntity.ok(response);

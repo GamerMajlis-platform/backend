@@ -165,7 +165,8 @@ public class EventController {
             @RequestParam(required = false) Boolean isPublic,
             @RequestParam(required = false) String gameTitle,
             @RequestParam(required = false) String gameCategory,
-            @RequestParam(required = false) Boolean competitive) {
+            @RequestParam(required = false) Boolean competitive,
+            @RequestParam(required = false) String status) {
         
         try {
             Long userId = getUserIdFromRequest(request);
@@ -192,6 +193,7 @@ public class EventController {
             if (gameTitle != null) updateData.put("gameTitle", gameTitle);
             if (gameCategory != null) updateData.put("gameCategory", gameCategory);
             if (competitive != null) updateData.put("competitive", competitive);
+            if (status != null) updateData.put("status", status);
 
             Map<String, Object> response = eventService.updateEvent(userId, eventId, updateData);
             return ResponseEntity.ok(response);

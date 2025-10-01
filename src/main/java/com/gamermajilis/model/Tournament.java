@@ -1,5 +1,6 @@
 package com.gamermajilis.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -106,19 +107,23 @@ public class Tournament {
     // Winner information
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "winner_id")
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "password", "verificationToken", "emailVerified", "banned", "banReason", "privacySettings", "authProvider", "updatedAt"})
     private User winner;
     
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "runner_up_id")
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "password", "verificationToken", "emailVerified", "banned", "banReason", "privacySettings", "authProvider", "updatedAt"})
     private User runnerUp;
     
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "third_place_id")
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "password", "verificationToken", "emailVerified", "banned", "banReason", "privacySettings", "authProvider", "updatedAt"})
     private User thirdPlace;
     
     // Organizer information
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "organizer_id", nullable = false)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "password", "verificationToken", "emailVerified", "banned", "banReason", "privacySettings", "authProvider", "updatedAt"})
     private User organizer;
     
     @ElementCollection
@@ -128,6 +133,7 @@ public class Tournament {
     
     // Participants
     @OneToMany(mappedBy = "tournament", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnoreProperties({"tournament", "hibernateLazyInitializer", "handler"})
     private List<TournamentParticipation> participations = new ArrayList<>();
     
     // Tournament settings

@@ -18,6 +18,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -384,8 +385,8 @@ public class ProductServiceImpl implements ProductService {
                     productPage = productRepository.findByStatusAndDeletedAtIsNullOrderByCreatedAtDesc(ProductStatus.ACTIVE, pageable);
                 }
             } else {
-                // Default: get active products
-                productPage = productRepository.findByStatusAndDeletedAtIsNullOrderByCreatedAtDesc(ProductStatus.ACTIVE, pageable);
+                // Default: get all non-deleted products
+                productPage = productRepository.findAll(pageable);
             }
             
             List<Map<String, Object>> products = productPage.getContent().stream()
@@ -469,6 +470,19 @@ public class ProductServiceImpl implements ProductService {
                     }
                 } catch (IllegalArgumentException e) {
                     // Ignore invalid status
+                }
+            }
+            if (updateData.get("isAvailable") != null) {
+                product.setIsAvailable((Boolean) updateData.get("isAvailable"));
+            }
+            if (updateData.get("moderationStatus") != null) {
+                product.setModerationStatus((String) updateData.get("moderationStatus"));
+            }
+            if (updateData.get("listedAt") != null) {
+                try {
+                    product.setListedAt(LocalDateTime.parse((String) updateData.get("listedAt"), DateTimeFormatter.ISO_LOCAL_DATE_TIME));
+                } catch (Exception e) {
+                    // ignore invalid format
                 }
             }
             

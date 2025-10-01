@@ -266,8 +266,8 @@ public class EventServiceImpl implements EventService {
             } else if (gameCategoryStr != null) {
                 eventPage = eventRepository.findByGameCategoryAndStatusAndDeletedAtIsNullOrderByStartDateTimeAsc(gameCategoryStr, EventStatus.REGISTRATION_OPEN, pageable);
             } else {
-                // Default: get public events with registration open
-                eventPage = eventRepository.findByIsPublicTrueAndStatusAndDeletedAtIsNullOrderByStartDateTimeAsc(EventStatus.REGISTRATION_OPEN, pageable);
+                // Default: return all non-deleted events regardless of status
+                eventPage = eventRepository.findAll(pageable);
             }
             
             List<Map<String, Object>> events = eventPage.getContent().stream()
@@ -336,6 +336,66 @@ public class EventServiceImpl implements EventService {
             }
             if (updateData.get("virtualLink") != null) {
                 event.setVirtualLink((String) updateData.get("virtualLink"));
+            }
+            if (updateData.get("endDateTime") != null) {
+                try {
+                    LocalDateTime endDateTime = LocalDateTime.parse((String) updateData.get("endDateTime"), DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+                    event.setEndDateTime(endDateTime);
+                } catch (DateTimeParseException e) {
+                    response.put("success", false);
+                    response.put("message", "Invalid end date time format");
+                    return response;
+                }
+            }
+            if (updateData.get("eventType") != null) {
+                try {
+                    EventType eventType = EventType.valueOf((String) updateData.get("eventType"));
+                    event.setEventType(eventType);
+                } catch (IllegalArgumentException e) {
+                    // ignore invalid
+                }
+            }
+            if (updateData.get("locationType") != null) {
+                try {
+                    EventLocationType locationType = EventLocationType.valueOf((String) updateData.get("locationType"));
+                    event.setLocationType(locationType);
+                } catch (IllegalArgumentException e) {
+                    // ignore invalid
+                }
+            }
+            if (updateData.get("registrationDeadline") != null) {
+                try {
+                    LocalDateTime regDeadline = LocalDateTime.parse((String) updateData.get("registrationDeadline"), DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+                    event.setRegistrationDeadline(regDeadline);
+                } catch (DateTimeParseException e) {
+                    // ignore invalid
+                }
+            }
+            if (updateData.get("registrationRequirements") != null) {
+                event.setRegistrationRequirements((String) updateData.get("registrationRequirements"));
+            }
+            if (updateData.get("requiresRegistration") != null) {
+                event.setRequiresRegistration((Boolean) updateData.get("requiresRegistration"));
+            }
+            if (updateData.get("isPublic") != null) {
+                event.setIsPublic((Boolean) updateData.get("isPublic"));
+            }
+            if (updateData.get("gameTitle") != null) {
+                event.setGameTitle((String) updateData.get("gameTitle"));
+            }
+            if (updateData.get("gameCategory") != null) {
+                event.setGameCategory((String) updateData.get("gameCategory"));
+            }
+            if (updateData.get("competitive") != null) {
+                event.setCompetitive((Boolean) updateData.get("competitive"));
+            }
+            if (updateData.get("status") != null) {
+                try {
+                    EventStatus status = EventStatus.valueOf((String) updateData.get("status"));
+                    event.setStatus(status);
+                } catch (IllegalArgumentException e) {
+                    // ignore invalid
+                }
             }
             
             // Save updated event

@@ -2,10 +2,17 @@ package com.gamermajilis.controller;
 import org.springframework.web.bind.annotation.*;
 
 import com.gamermajilis.model.Tournament;
+import com.gamermajilis.model.User;
+import com.gamermajilis.repository.UserRepository;
 import com.gamermajilis.service.TournamentService;
+import com.gamermajilis.util.JwtUtil;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import java.util.List;
@@ -16,7 +23,15 @@ import java.util.Optional;
 @RequestMapping("/tournaments")
 public class TournamentController {
 
+    private static final Logger logger = LoggerFactory.getLogger(TournamentController.class);
+
     private final TournamentService tournamentService;
+
+    @Autowired
+    private JwtUtil jwtUtil;
+
+    @Autowired
+    private UserRepository userRepository;
 
     public TournamentController(TournamentService tournamentService) {
         this.tournamentService = tournamentService;
@@ -24,9 +39,41 @@ public class TournamentController {
 
     // Create tournament
     @PostMapping
-    public ResponseEntity<Tournament> createTournament(@Valid @RequestBody Tournament tournament) {
+    public ResponseEntity<Tournament> createTournament(@Valid @RequestBody Tournament tournament, HttpServletRequest request) {
+        // Extract user ID from JWT token
+        Long userId = getUserIdFromRequest(request);
+        if (userId == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        // Get the user from database and set as organizer
+        Optional<User> userOpt = userRepository.findById(userId);
+        if (!userOpt.isPresent()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        tournament.setOrganizer(userOpt.get());
         Tournament createdTournament = tournamentService.createTournament(tournament);
         return new ResponseEntity<>(createdTournament, HttpStatus.CREATED);
+    }
+
+    // Helper method to extract user ID from JWT token
+    private Long getUserIdFromRequest(HttpServletRequest request) {
+        String authHeader = request.getHeader("Authorization");
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            return null;
+        }
+
+        try {
+            String token = authHeader.substring(7);
+            if (!jwtUtil.validateToken(token)) {
+                return null;
+            }
+            return jwtUtil.getUserIdFromToken(token);
+        } catch (Exception e) {
+            logger.warn("Invalid token in request", e);
+            return null;
+        }
     }
 
     // Update tournament
@@ -79,12 +126,3 @@ public class TournamentController {
         return ResponseEntity.ok().build();
     }
 }
-/**
- This controller will handle the endpoints related to tournament management:
-* Create Tournament
-* Update Tournament
-* Delete Tournament
-* View Tournament Details
-* Add Moderator
-* Increment View Count
-**/

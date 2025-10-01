@@ -499,6 +499,10 @@ public class Product {
     public void setWarrantyDescription(String warrantyDescription) {
         this.warrantyDescription = warrantyDescription;
     }
+
+    public void setModerationStatus(String moderationStatus) {
+        this.moderationStatus = moderationStatus;
+    }
     
     public String getMainImageUrl() {
         return mainImageUrl;
