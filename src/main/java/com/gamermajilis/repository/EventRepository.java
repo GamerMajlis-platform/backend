@@ -56,6 +56,9 @@ public interface EventRepository extends JpaRepository<Event, Long> {
     Page<Event> findEventsInRange(@Param("startDate") LocalDateTime startDate, 
                                  @Param("endDate") LocalDateTime endDate, 
                                  Pageable pageable);
+
+    // Find all non-deleted events
+    Page<Event> findByDeletedAtIsNullOrderByStartDateTimeAsc(Pageable pageable);
     
     // Find event by ID and organizer for authorization
     Optional<Event> findByIdAndOrganizerIdAndDeletedAtIsNull(Long id, Long organizerId);

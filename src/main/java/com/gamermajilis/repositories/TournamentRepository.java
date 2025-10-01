@@ -21,6 +21,9 @@ public interface TournamentRepository extends JpaRepository<Tournament, Long> {
     
     // Find all tournaments that are open for registration
     List<Tournament> findByStatusAndCurrentParticipantsLessThan(TournamentStatus status, Integer maxParticipants);
+
+    // Find all non-deleted tournaments
+    List<Tournament> findByDeletedAtIsNullOrderByCreatedAtDesc();
     
 }
 

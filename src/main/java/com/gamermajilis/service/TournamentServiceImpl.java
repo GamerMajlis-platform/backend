@@ -57,7 +57,7 @@ public class TournamentServiceImpl implements TournamentService {
 
     @Override
     public List<Tournament> getAllTournaments() {
-        return tournamentRepository.findAll();
+        return tournamentRepository.findByDeletedAtIsNullOrderByCreatedAtDesc();
     }
 
     @Override

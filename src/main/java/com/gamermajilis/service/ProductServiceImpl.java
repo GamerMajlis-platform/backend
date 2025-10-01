@@ -386,7 +386,7 @@ public class ProductServiceImpl implements ProductService {
                 }
             } else {
                 // Default: get all non-deleted products
-                productPage = productRepository.findAll(pageable);
+                productPage = productRepository.findByDeletedAtIsNullOrderByCreatedAtDesc(pageable);
             }
             
             List<Map<String, Object>> products = productPage.getContent().stream()

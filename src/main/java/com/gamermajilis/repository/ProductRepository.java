@@ -94,4 +94,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     // Find products with free shipping
     Page<Product> findByFreeShippingTrueAndStatusAndDeletedAtIsNullOrderByCreatedAtDesc(
         ProductStatus status, Pageable pageable);
+
+    // Find all non-deleted products
+    Page<Product> findByDeletedAtIsNullOrderByCreatedAtDesc(Pageable pageable);
 }

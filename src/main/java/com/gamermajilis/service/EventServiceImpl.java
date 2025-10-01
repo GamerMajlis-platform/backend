@@ -267,7 +267,7 @@ public class EventServiceImpl implements EventService {
                 eventPage = eventRepository.findByGameCategoryAndStatusAndDeletedAtIsNullOrderByStartDateTimeAsc(gameCategoryStr, EventStatus.REGISTRATION_OPEN, pageable);
             } else {
                 // Default: return all non-deleted events regardless of status
-                eventPage = eventRepository.findAll(pageable);
+                eventPage = eventRepository.findByDeletedAtIsNullOrderByStartDateTimeAsc(pageable);
             }
             
             List<Map<String, Object>> events = eventPage.getContent().stream()
