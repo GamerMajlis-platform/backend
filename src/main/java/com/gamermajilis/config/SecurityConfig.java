@@ -88,6 +88,9 @@ public class SecurityConfig {
                         // Test endpoints (remove in production)
                         .requestMatchers("/test/**").permitAll()
 
+                        // AI endpoints
+                        .requestMatchers("/ai/**").permitAll()
+
                         // Swagger/OpenAPI endpoints
                         .requestMatchers("/swagger-ui/**", "/swagger-ui.html", "/api-docs/**", "/v3/api-docs/**")
                         .permitAll()

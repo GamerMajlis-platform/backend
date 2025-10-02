@@ -58,6 +58,13 @@ services:
       SPRING_MAIL_USERNAME: ${EMAIL_USERNAME:-mhmdth276@gmail.com}
       SPRING_MAIL_PASSWORD: ${EMAIL_PASSWORD:-saag tgwc hsab qzte}
       
+      # AI configuration
+      GROQ_API_KEY: ${GROQ_API_KEY}
+      DB_HOST: ${DB_HOST:-postgres}
+      DB_USER: ${DB_USER:-gamermajilis_user}
+      DB_PASSWORD: ${DB_PASSWORD:-gamermajilis_pass123}
+      DB_NAME: ${DB_NAME:-gamermajilis_db}
+      
       # Discord OAuth (update with your credentials)
       DISCORD_CLIENT_ID: ${DISCORD_CLIENT_ID:-1416218898063429724}
       DISCORD_CLIENT_SECRET: ${DISCORD_CLIENT_SECRET:-AiAhe95Q2fOoDdi_ZGVr6PNUS3s6rKXo}

@@ -31,6 +31,7 @@ RUN mvn dependency:resolve -B
 
 # Copy source code
 COPY src src
+COPY AI AI
 
 # Build the application (skip tests for faster builds)
 RUN mvn clean package -DskipTests
@@ -43,9 +44,20 @@ WORKDIR /app
 
 # Copy the jar file from builder stage
 COPY --from=builder /app/target/*.jar app.jar
+COPY --from=builder /app/AI /app/AI
+
+# Install Python and required packages for AI helper
+RUN apt-get update && apt-get install -y python3 python3-pip python3-venv curl && rm -rf /var/lib/apt/lists/*
 
 # Create a non-root user for security
-RUN addgroup --system spring && adduser --system spring --ingroup spring
+RUN addgroup --system spring && adduser --system --ingroup spring spring
+
+# Create venv and install Python packages
+RUN python3 -m venv /app/venv \
+  && /app/venv/bin/pip install --no-cache-dir --upgrade pip \
+  && /app/venv/bin/pip install --no-cache-dir groq python-dotenv mysql-connector-python \
+  && chown -R spring:spring /app
+
 USER spring:spring
 
 # Expose port 8080
